@@ -1,0 +1,10 @@
+<!-- blockchain/templates/blockchain/set_data.html -->
+<h1>Set Data</h1>
+<form method="post">
+    {% csrf_token %}
+    <label>Key:</label>
+    <input type="text" name="key" required><br>
+    <label>Value:</label>
+    <input type="text" name="value" required><br>
+    <button type="submit">Submit</button>
+</form>
