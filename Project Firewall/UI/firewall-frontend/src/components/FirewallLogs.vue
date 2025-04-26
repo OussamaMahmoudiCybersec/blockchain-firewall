@@ -56,9 +56,12 @@ const filteredLogs = computed(() => {
     if (searchQuery.value) {
       const query = searchQuery.value.toLowerCase();
       return log.source_ip.toLowerCase().includes(query) ||
+             log.source_port?.toString()?.includes(query) ||
              log.destination_ip.toLowerCase().includes(query) ||
+             log.destination_port?.toString()?.includes(query) ||
+             log.protocol?.toLowerCase()?.includes(query) ||
              log.action.toLowerCase().includes(query) ||
-             log.message.toLowerCase().includes(query) ||
+             log.message?.toLowerCase()?.includes(query) ||
              log.timestamp.toLowerCase().includes(query);
     }
     
@@ -92,7 +95,7 @@ watch([selectedAction, timeRange], () => {
 const actionOptions = [
   { value: 'all', label: 'All Actions' },
   { value: 'ALLOW', label: 'Allowed' },
-  { value: 'BLOCK', label: 'Blocked' }
+  { value: 'DENY', label: 'Blocked' }
 ];
 
 // Time range options
@@ -177,27 +180,31 @@ function clearFilters() {
         <table>
           <thead>
             <tr>
-              <th>Timestamp</th>
-              <th>Source IP</th>
-              <th>Destination IP</th>
-              <th>Action</th>
-              <th>Message</th>
+              <th>timestamp</th>
+              <th>source-ip</th>
+              <th>source_port</th>
+              <th>destination-ip</th>
+              <th>destination-port</th>
+              <th>protocol</th>
+              <th>action</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="log in filteredLogs" :key="log.id" :class="{ 'blocked': log.action === 'BLOCK', 'allowed': log.action === 'ALLOW' }">
               <td>{{ log.timestamp }}</td>
               <td>{{ log.source_ip }}</td>
+              <td>{{ log.source_port || 'N/A' }}</td>
               <td>{{ log.destination_ip }}</td>
+              <td>{{ log.destination_port || 'N/A' }}</td>
+              <td>{{ log.protocol || 'N/A' }}</td>
               <td>
                 <span class="action-badge" :class="log.action.toLowerCase()">
                   {{ log.action }}
                 </span>
               </td>
-              <td>{{ log.message }}</td>
             </tr>
             <tr v-if="filteredLogs.length === 0">
-              <td colspan="5" class="no-data">No matching logs found</td>
+              <td colspan="7" class="no-data">No matching logs found</td>
             </tr>
           </tbody>
         </table>

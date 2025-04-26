@@ -28,3 +28,15 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+
+
+# Ignore PDFs
+*.pdf
+
+# Ignore text notes
+*.txt
+
+# Ignore screenshots and videos
+/photos screenshots/
+/video/
